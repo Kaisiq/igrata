@@ -70,9 +70,9 @@ const partner_dares: string[] = [
 
 const other_dares: Dare[] = [
   {
-    text: "Hold a plank position",
+    text: "Направи планк за 30 секунди",
     partnersCount: 0,
-    timeLimit: 30,
+    timeLimit: 40,
     isUnskippable: true,
   },
   {
@@ -82,33 +82,21 @@ const other_dares: Dare[] = [
     isUnskippable: true,
   },
   {
-    text: "Maintain eye contact with your partner",
+    text: "Гледай партньора си право в очите",
     partnersCount: 1,
     timeLimit: 45,
     isUnskippable: true,
   },
   {
-    text: "Form a human pyramid with three players",
+    text: "Направете човешка пирамида с партньорите",
     partnersCount: 2,
     isUnskippable: false,
   },
   {
-    text: "Create a synchronized dance routine",
+    text: "Измислете танц и го изтанцувайте в синхрон",
     partnersCount: 2,
-    timeLimit: 60,
+    timeLimit: 120,
     isUnskippable: true,
-  },
-  {
-    text: "Hold a plank position",
-    partnersCount: 0,
-    timeLimit: 30,
-    isUnskippable: false,
-  },
-  {
-    text: "Maintain eye contact with your partner",
-    partnersCount: 1,
-    timeLimit: 45,
-    isUnskippable: false,
   },
 ];
 
