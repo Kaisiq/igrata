@@ -4,11 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
-import { Player } from "../types/game";
+import type { Player } from "@/types/game";
 import { Users } from "lucide-react";
 
 interface GameSetupProps {
-  onStartGame: (playersAsNumbers: boolean, players: Player[], playersAsNumbersLength: number) => void;
+  onStartGame: (
+    playersAsNumbers: boolean,
+    players: Player[],
+    playersAsNumbersLength: number,
+  ) => void;
 }
 
 export default function GameSetup({ onStartGame }: GameSetupProps) {
@@ -19,7 +23,10 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
 
   const addPlayer = () => {
     if (playerName.trim()) {
-      setPlayers([...players, { name: playerName.trim(), id: Math.random().toString() }]);
+      setPlayers([
+        ...players,
+        { name: playerName.trim(), id: Math.random().toString() },
+      ]);
       setPlayerName("");
     }
   };
@@ -29,18 +36,21 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
   };
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="lg:w-[60%] md:w-[80%] sm:w-[90%] m-auto space-y-6 md:px-24 py-24 px-6">
       <div className="text-center space-y-2">
         <h1 className="text-4xl font-bold">Играта v2.1</h1>
         <p className="text-muted-foreground">
-          {playersAsNumbers ? "Добави брой играчи, за да започнеш" : "Добави поне 2 имена, за да започнеш"}
+          {playersAsNumbers
+            ? "Добави брой играчи, за да започнеш"
+            : "Добави поне 2 имена, за да започнеш"}
         </p>
 
-        <div className="flex gap-8 justify-between items-center border rounded-lg p-3">
-          <div className="flex-col w-[70%]">
+        <div className="flex gap-8 justify-between items-center border rounded-lg p-3 md:w-[70%] mx-auto">
+          <div className="text-start flex-col md:w-[70%]">
             <h4>Използвай числа вместо имена</h4>
-            <span className="text-sm text-muted-foreground">
-              играеш без имена и показва колко човека вдясно от теб е партньора ти
+            <span className="text-sm text-wrap text-muted-foreground">
+              Играеш без имена и показва колко човека вдясно от теб е партньора
+              ти
             </span>
           </div>
           <Switch
@@ -65,22 +75,29 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
         <>
           <div className="flex gap-2">
             <Input
-              placeholder="Enter player name"
+              placeholder="Име на играча"
               value={playerName}
               onChange={(e) => setPlayerName(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && addPlayer()}
             />
-            <Button onClick={addPlayer}>Add</Button>
+            <Button onClick={addPlayer}>Добави</Button>
           </div>
           {players.length > 0 && (
             <div className="space-y-2">
               {players.map((player) => (
-                <div key={player.id} className="flex items-center justify-between bg-secondary p-3 rounded-lg">
+                <div
+                  key={player.id}
+                  className="flex items-center justify-between bg-secondary p-3 rounded-lg"
+                >
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4" />
                     <span>{player.name}</span>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => removePlayer(player.id)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removePlayer(player.id)}
+                  >
                     Премахни
                   </Button>
                 </div>
@@ -92,10 +109,14 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
       <Button
         className="w-full"
         size="lg"
-        disabled={playersAsNumbers ? playersAsNumbersLength < 2 : players.length < 2}
-        onClick={() => onStartGame(playersAsNumbers, players, playersAsNumbersLength)}
+        disabled={
+          playersAsNumbers ? playersAsNumbersLength < 2 : players.length < 2
+        }
+        onClick={() =>
+          onStartGame(playersAsNumbers, players, playersAsNumbersLength)
+        }
       >
-        Започни да пукаш
+        Айде мятай ги
       </Button>
     </div>
   );
