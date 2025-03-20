@@ -88,14 +88,14 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
   }
 
   return (
-    <div className="space-y-10 p-6 py-20 w-[100%] lg:w-[60%] m-auto md:w-[80%]">
-      <div className="flex justify-between items-center">
+    <div className="m-auto w-[100%] space-y-10 p-6 py-20 md:w-[80%] lg:w-[60%]">
+      <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Ред на {currentPlayer.name}</h2>
         </div>
       </div>
 
-      <div className="bg-card py-16 px-6 min-w-fit rounded-lg shadow-lg space-y-4">
+      <div className="bg-card min-w-fit space-y-4 rounded-lg px-6 py-16 shadow-lg">
         <div className="flex flex-col items-center gap-2">
           <h3 className="text-xl font-semibold">Предизвикателство:</h3>
           {
@@ -112,10 +112,10 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
             </p>
           }
           {gameState.currentDare?.isUnskippable && (
-            <Lock className="h-4 w-4 text-destructive" />
+            <Lock className="text-destructive h-4 w-4" />
           )}
           {gameState.currentDare?.timeLimit && (
-            <Timer className="h-4 w-4 text-primary" />
+            <Timer className="text-primary h-4 w-4" />
           )}
         </div>
         <p className="text-lg">{gameState.currentDare?.text}</p>
@@ -137,7 +137,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
           )}
       </div>
 
-      <div className="flex justify-between text-md text-muted-foreground">
+      <div className="text-md text-muted-foreground flex justify-between">
         <span>Оставащи пропускания: {gameState.dareSkipsLeft}</span>
         <span>Оставащи смени на партньора: {gameState.partnerSkipsLeft}</span>
       </div>
@@ -154,9 +154,9 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
         Готово
       </Button>
 
-      <div className="flex flex-row gap-3 w-full">
+      <div className="flex w-full flex-row gap-3">
         <Button
-          className="text-wrap py-6 w-full"
+          className="w-full text-wrap py-6"
           variant="outline"
           onClick={() =>
             handleSkipDare(gameState, currentPlayer, setGameState, setShowDrink)
@@ -170,7 +170,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
           Смени Предизвикателство
         </Button>
         <Button
-          className="text-wrap py-6 w-full"
+          className="w-full text-wrap py-6"
           variant="outline"
           onClick={() =>
             handleSkipPartner(

@@ -36,8 +36,8 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
   };
 
   return (
-    <div className="lg:w-[60%] md:w-[80%] sm:w-[90%] m-auto space-y-6 md:px-24 py-24 px-6">
-      <div className="text-center space-y-2">
+    <div className="m-auto space-y-6 px-6 py-24 sm:w-[90%] md:w-[80%] md:px-24 lg:w-[60%]">
+      <div className="space-y-2 text-center">
         <h1 className="text-4xl font-bold">Играта v2.1</h1>
         <p className="text-muted-foreground">
           {playersAsNumbers
@@ -45,10 +45,10 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
             : "Добави поне 2 имена, за да започнеш"}
         </p>
 
-        <div className="flex gap-8 justify-between items-center border rounded-lg p-3 md:w-[70%] mx-auto">
-          <div className="text-start flex-col md:w-[70%]">
+        <div className="mx-auto flex items-center justify-between gap-8 rounded-lg border p-3 md:w-[70%]">
+          <div className="flex-col text-start md:w-[70%]">
             <h4>Използвай числа вместо имена</h4>
-            <span className="text-sm text-wrap text-muted-foreground">
+            <span className="text-muted-foreground text-wrap text-sm">
               Играеш без имена и показва колко човека вдясно от теб е партньора
               ти
             </span>
@@ -87,7 +87,7 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
               {players.map((player) => (
                 <div
                   key={player.id}
-                  className="flex items-center justify-between bg-secondary p-3 rounded-lg"
+                  className="bg-secondary flex items-center justify-between rounded-lg p-3"
                 >
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4" />
