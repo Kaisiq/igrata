@@ -13,6 +13,7 @@ import {
   startFirstRound,
   handleSkipDare,
   handleSkipPartner,
+  basicPlayer,
 } from "@/lib/helpers";
 
 interface GameScreenProps {
@@ -31,7 +32,9 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
   const [showDrink, setShowDrink] = useState(false);
   const [showNextPlayer, setShowNextPlayer] = useState(false);
   const [timerActive, setTimerActive] = useState(false);
-  const [currentPlayer, setCurrentPlayer] = useState(gameState.players[0]);
+  const [currentPlayer, setCurrentPlayer] = useState(
+    gameState.players[0] ?? basicPlayer,
+  );
 
   useEffect(() => {
     startFirstRound(gameState, setGameState, setTimerActive);
@@ -41,7 +44,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
     setCurrentPlayer(
       gameState.players[
         gameState.currentPlayerIndex % gameState.players.length
-      ],
+      ] ?? basicPlayer,
     );
   }, [gameState.players, gameState.currentPlayerIndex]);
 
@@ -156,7 +159,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
 
       <div className="flex w-full flex-row gap-3">
         <Button
-          className="w-full text-wrap py-6"
+          className="w-full py-6 text-wrap"
           variant="outline"
           onClick={() =>
             handleSkipDare(gameState, currentPlayer, setGameState, setShowDrink)
@@ -170,7 +173,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
           Смени Предизвикателство
         </Button>
         <Button
-          className="w-full text-wrap py-6"
+          className="w-full py-6 text-wrap"
           variant="outline"
           onClick={() =>
             handleSkipPartner(

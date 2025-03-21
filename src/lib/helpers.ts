@@ -175,6 +175,8 @@ const handleSkipPartner = (
 };
 
 export {
+  basicDare,
+  basicPlayer,
   getRandomDare,
   getRandomPartners,
   startNewRound,
