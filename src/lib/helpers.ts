@@ -1,9 +1,24 @@
-import { INITIAL_SKIPS, type GameState, type Player } from "@/types/game";
+import {
+  type Dare,
+  INITIAL_SKIPS,
+  type GameState,
+  type Player,
+} from "@/types/game";
 import { DARES } from "./dares";
 import type { Dispatch, SetStateAction } from "react";
 
+const basicDare = {
+  text: "Всички пият шот",
+  partnersCount: 0,
+  isUnskippable: false,
+} as Dare;
+
+const basicPlayer = { name: "0", id: "0" } as Player;
+
 const getRandomDare = (dares = DARES) => {
-  return dares[Math.floor(Math.random() * dares.length)];
+  const toReturn = dares[Math.floor(Math.random() * dares.length)];
+  if (!toReturn) return basicDare;
+  return toReturn;
 };
 
 const getRandomPartners = (
@@ -23,7 +38,7 @@ const startFirstRound = (
   setTimerActive: Dispatch<SetStateAction<boolean>>,
 ) => {
   const firstDare = getRandomDare();
-  const firstPlayer = gameState.players[0];
+  const firstPlayer = gameState.players?.[0] ?? basicPlayer;
   const partners =
     firstDare.partnersCount > 0
       ? getRandomPartners(
@@ -62,7 +77,7 @@ const startNewRound = (
       ? getRandomPartners(
           newDare.partnersCount || 1,
           gameState.players,
-          gameState.players[newPlayerIndex],
+          gameState.players[newPlayerIndex] ?? basicPlayer,
         )
       : [];
 
