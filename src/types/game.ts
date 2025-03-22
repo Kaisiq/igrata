@@ -5,8 +5,10 @@ export interface Player {
 
 export interface Dare {
   text: string;
+  bonusText?: string;
   timeLimit?: number;
   isUnskippable: boolean;
+  shouldLockDone?: boolean;
   partnersCount: number;
 }
 

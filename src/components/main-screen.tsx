@@ -91,14 +91,14 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
   }
 
   return (
-    <div className="m-auto w-[100%] space-y-10 p-6 py-20 md:w-[80%] lg:w-[60%]">
+    <div className="m-auto h-[100vh] w-[100%] space-y-10 bg-gray-100 p-6 py-20 md:w-[80%] lg:w-[60%]">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Ред на {currentPlayer.name}</h2>
         </div>
       </div>
 
-      <div className="bg-card min-w-fit space-y-4 rounded-lg px-6 py-16 shadow-lg">
+      <div className="bg-card min-w-fit space-y-4 rounded-lg px-6 py-16 shadow-xl">
         <div className="flex flex-col items-center gap-2">
           <h3 className="text-xl font-semibold">Предизвикателство:</h3>
           {
@@ -114,14 +114,19 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
                 : "няма"}
             </p>
           }
-          {gameState.currentDare?.isUnskippable && (
-            <Lock className="text-destructive h-4 w-4" />
-          )}
-          {gameState.currentDare?.timeLimit && (
-            <Timer className="text-primary h-4 w-4" />
-          )}
+          <div className="flex flex-row gap-3">
+            {gameState.currentDare?.isUnskippable && (
+              <Lock className="text-destructive h-4 w-4" />
+            )}
+            {gameState.currentDare?.timeLimit && (
+              <Timer className="text-primary h-4 w-4" />
+            )}
+          </div>
         </div>
         <p className="text-lg">{gameState.currentDare?.text}</p>
+        {gameState.currentDare?.bonusText && (
+          <p>{gameState.currentDare.bonusText}</p>
+        )}
 
         {gameState.currentDare?.timeLimit &&
           gameState.timeRemaining !== undefined && (
@@ -145,19 +150,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
         <span>Оставащи смени на партньора: {gameState.partnerSkipsLeft}</span>
       </div>
 
-      <Button
-        className="w-full"
-        onClick={handleCompleteDare}
-        disabled={
-          gameState.currentDare?.timeLimit !== undefined &&
-          gameState.timeRemaining !== undefined &&
-          gameState.timeRemaining > 0
-        }
-      >
-        Готово
-      </Button>
-
-      <div className="flex w-full flex-row gap-3">
+      <div className="flex w-full flex-row flex-wrap gap-3">
         <Button
           className="w-full py-6 text-wrap"
           variant="outline"
@@ -193,6 +186,19 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
           Смени Партньор
         </Button>
       </div>
+
+      <Button
+        className="w-full"
+        onClick={handleCompleteDare}
+        disabled={
+          gameState.currentDare?.timeLimit !== undefined &&
+          gameState.timeRemaining !== undefined &&
+          gameState.timeRemaining > 0 &&
+          gameState.currentDare?.shouldLockDone
+        }
+      >
+        Готово
+      </Button>
     </div>
   );
 }
