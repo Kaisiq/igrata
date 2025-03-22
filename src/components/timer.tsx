@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
-const Timer = ({ timeLimit }) => {
+const Timer = ({ timeLimit }: {timeLimit: number}) => {
   const [timeLeft, setTimeLeft] = useState(timeLimit);
   const [timeOut, setTimeOut] = useState(false);
 
