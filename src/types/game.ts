@@ -1,6 +1,6 @@
 export interface Player {
   name: string;
-  id: string;
+  id: number;
 }
 
 export interface Dare {
