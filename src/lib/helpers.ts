@@ -14,18 +14,16 @@ const basicDare = {
   isUnskippable: false,
 } as Dare;
 
-const basicPlayer = { name: "0", id: "0" } as Player;
+const basicPlayer = { name: "0", id: 0 } as Player;
 
-const getRandomDare = (
-  gameState: GameState,
-  dares: Dare[] = DARES,
-): Dare => {
+const getRandomDare = (gameState: GameState, dares: Dare[] = DARES): Dare => {
   const { dareHistory, round, currentPlayerIndex, players } = gameState;
   const currentPlayer = players[currentPlayerIndex];
 
   const availableDares = dares.filter((dare) => {
     const lastShownToPlayer = dareHistory.find(
-      (entry) => entry.dare.text === dare.text && entry.player.id === currentPlayer.id,
+      (entry) =>
+        entry.dare.text === dare.text && entry.player.id === currentPlayer?.id,
     );
     if (lastShownToPlayer && round - lastShownToPlayer.round < 5) {
       return false;
@@ -63,8 +61,9 @@ const startFirstRound = (
   gameState: GameState,
   setGameState: Dispatch<SetStateAction<GameState>>,
   setTimerActive: Dispatch<SetStateAction<boolean>>,
+  dares: Dare[],
 ) => {
-  const firstDare = getRandomDare(gameState);
+  const firstDare = getRandomDare(gameState, dares);
   const firstPlayer = gameState.players?.[0] ?? basicPlayer;
   const partners =
     firstDare.partnersCount > 0
@@ -102,11 +101,11 @@ const startNewRound = (
   gameState: GameState,
   setGameState: Dispatch<SetStateAction<GameState>>,
   setTimerActive: Dispatch<SetStateAction<boolean>>,
+  dares: Dare[],
 ) => {
   const newPlayerIndex =
     (gameState.currentPlayerIndex + 1) % gameState.players.length;
-  const newRound =
-    newPlayerIndex === 0 ? gameState.round + 1 : gameState.round;
+  const newRound = newPlayerIndex === 0 ? gameState.round + 1 : gameState.round;
 
   const tempGameState = {
     ...gameState,
@@ -114,7 +113,7 @@ const startNewRound = (
     round: newRound,
   };
 
-  const newDare = getRandomDare(tempGameState);
+  const newDare = getRandomDare(tempGameState, dares);
   const newPlayer = gameState.players[newPlayerIndex] ?? basicPlayer;
   const partners =
     newDare.partnersCount > 0
@@ -153,6 +152,7 @@ const handleSkipDare = (
   currentPlayer: Player,
   setGameState: Dispatch<SetStateAction<GameState>>,
   setShowDrink: Dispatch<SetStateAction<boolean>>,
+  dares: Dare[],
 ) => {
   if (
     gameState.dareSkipsLeft > 0 &&
@@ -161,7 +161,7 @@ const handleSkipDare = (
   ) {
     const newDare = getRandomDare(
       gameState,
-      DARES.filter((el) => el.text !== gameState.currentDare.text),
+      dares.filter((el) => el.text !== gameState.currentDare.text),
     );
     let newPartners = [] as Player[];
 

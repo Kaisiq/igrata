@@ -2,17 +2,20 @@
 import { useState } from "react";
 import GameSetup from "@/components/GameSetup";
 import GameScreen from "@/components/GameScreen";
-import type { Player } from "@/types/game";
+import type { Player, Dare } from "@/types/game";
 
 export default function MainScreen() {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [dares, setDares] = useState<Dare[]>([]);
   const [gameStarted, setGameStarted] = useState(false);
 
   const handleStartGame = (
     playersAsNumbers: boolean,
     players: Player[],
     playersAsNumbersLength: number,
+    dares: Dare[],
   ) => {
+    setDares(dares);
     if (!playersAsNumbers) {
       setPlayers(players);
       setGameStarted(true);
@@ -37,7 +40,7 @@ export default function MainScreen() {
       {!gameStarted ? (
         <GameSetup onStartGame={handleStartGame} />
       ) : (
-        <GameScreen initialPlayers={players} />
+        <GameScreen initialPlayers={players} dares={dares} />
       )}
     </main>
   );

@@ -7,12 +7,16 @@ import { useState } from "react";
 import type { Player } from "@/types/game";
 import { Users } from "lucide-react";
 import { toast } from "sonner";
+import { DARES } from "@/lib/dares";
+import DaresModal from "./DaresModal";
+import type { Dare } from "@/types/game";
 
 interface GameSetupProps {
   onStartGame: (
     playersAsNumbers: boolean,
     players: Player[],
     playersAsNumbersLength: number,
+    dares: Dare[],
   ) => void;
 }
 
@@ -21,6 +25,9 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
   const [players, setPlayers] = useState<Player[]>([]);
   const [playersAsNumbers, setPlayersAsNumbers] = useState(false);
   const [playersAsNumbersLength, setPlayersAsNumbersLength] = useState(0);
+  const [dares, setDares] = useState<Dare[]>(
+    DARES.map((dare, index) => ({ ...dare, id: index })),
+  );
 
   const addPlayer = () => {
     const newPlayer = playerName.trim();
@@ -119,11 +126,12 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
           playersAsNumbers ? playersAsNumbersLength < 2 : players.length < 2
         }
         onClick={() =>
-          onStartGame(playersAsNumbers, players, playersAsNumbersLength)
+          onStartGame(playersAsNumbers, players, playersAsNumbersLength, dares)
         }
       >
         Айде мятай ги
       </Button>
+      <DaresModal dares={dares} setDares={setDares} />
     </div>
   );
 }

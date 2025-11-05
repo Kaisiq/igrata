@@ -95,7 +95,7 @@ const partner_dares: string[] = [
   "С партньора ти можете да контактувате само с някакъв животински звук до следващия ти ход",
 ];
 
-const other_dares: Dare[] = [
+const other_dares: Omit<Dare, "id">[] = [
   {
     text: "Довършете текста",
     partnersCount: 1,
@@ -207,16 +207,20 @@ const other_dares: Dare[] = [
   },
 ];
 
+let dareIdCounter = 0;
+
 export const DARES: Dare[] = [
+  ...other_dares.map((dare) => ({ ...dare, id: dareIdCounter++ })),
   ...solo_dares.map((dareString) => ({
     text: dareString,
     partnersCount: 0,
     isUnskippable: false,
+    id: dareIdCounter++,
   })),
   ...partner_dares.map((dareString) => ({
     text: dareString,
     partnersCount: 1,
     isUnskippable: false,
+    id: dareIdCounter++,
   })),
-  ...other_dares,
 ];

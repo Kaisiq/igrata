@@ -23,15 +23,12 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
 
   const addPlayer = () => {
     if (playerName.trim()) {
-      setPlayers([
-        ...players,
-        { name: playerName.trim(), id: Math.random().toString() },
-      ]);
+      setPlayers([...players, { name: playerName.trim(), id: Math.random() }]);
       setPlayerName("");
     }
   };
 
-  const removePlayer = (id: string) => {
+  const removePlayer = (id: number) => {
     setPlayers(players.filter((p) => p.id !== id));
   };
 
@@ -48,7 +45,7 @@ export default function GameSetup({ onStartGame }: GameSetupProps) {
         <div className="mx-auto flex items-center justify-between gap-8 rounded-lg border p-3 md:w-[70%]">
           <div className="flex-col text-start md:w-[70%]">
             <h4>Използвай числа вместо имена</h4>
-            <span className="text-muted-foreground text-wrap text-sm">
+            <span className="text-muted-foreground text-sm text-wrap">
               Играеш без имена и показва колко човека вдясно от теб е партньора
               ти
             </span>

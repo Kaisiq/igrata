@@ -15,12 +15,14 @@ import {
   basicPlayer,
   basicDare,
 } from "@/lib/helpers";
+import type { Dare } from "@/types/game";
 
 interface GameScreenProps {
   initialPlayers: Player[];
+  dares: Dare[];
 }
 
-export default function GameScreen({ initialPlayers }: GameScreenProps) {
+export default function GameScreen({ initialPlayers, dares }: GameScreenProps) {
   const [gameState, setGameState] = useState<GameState>({
     players: initialPlayers,
     currentPlayerIndex: 0,
@@ -36,7 +38,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
   const [timerActive, setTimerActive] = useState(false);
 
   useEffect(() => {
-    startFirstRound(gameState, setGameState, setTimerActive);
+    startFirstRound(gameState, setGameState, setTimerActive, dares);
   }, []);
 
   useEffect(() => {
@@ -77,7 +79,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
   };
 
   const handleNextPlayer = () => {
-    startNewRound(gameState, setGameState, setTimerActive);
+    startNewRound(gameState, setGameState, setTimerActive, dares);
     setShowNextPlayer(false);
   };
 
@@ -185,7 +187,13 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
           className="w-full py-6 text-wrap"
           variant="outline"
           onClick={() =>
-            handleSkipDare(gameState, currentPlayer, setGameState, setShowDrink)
+            handleSkipDare(
+              gameState,
+              currentPlayer,
+              setGameState,
+              setShowDrink,
+              dares,
+            )
           }
           disabled={
             gameState.dareSkipsLeft === 0 ||

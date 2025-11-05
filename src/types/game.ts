@@ -4,6 +4,7 @@ export interface Player {
 }
 
 export interface Dare {
+  id: number;
   text: string;
   bonusText?: string;
   timeLimit?: number;
