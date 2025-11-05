@@ -12,6 +12,12 @@ export interface Dare {
   partnersCount: number;
 }
 
+export interface DareHistoryEntry {
+  dare: Dare;
+  player: Player;
+  round: number;
+}
+
 export interface GameState {
   players: Player[];
   currentPlayerIndex: number;
@@ -20,6 +26,8 @@ export interface GameState {
   currentDare: Dare;
   currentPartners: Player[];
   timeRemaining?: number;
+  round: number;
+  dareHistory: DareHistoryEntry[];
 }
 
 export const INITIAL_SKIPS = 3;

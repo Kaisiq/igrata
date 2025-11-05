@@ -3,6 +3,7 @@ import {
   INITIAL_SKIPS,
   type GameState,
   type Player,
+  type DareHistoryEntry,
 } from "@/types/game";
 import { DARES } from "./dares";
 import type { Dispatch, SetStateAction } from "react";
@@ -15,8 +16,34 @@ const basicDare = {
 
 const basicPlayer = { name: "0", id: "0" } as Player;
 
-const getRandomDare = (dares = DARES) => {
-  const toReturn = dares[Math.floor(Math.random() * dares.length)];
+const getRandomDare = (
+  gameState: GameState,
+  dares: Dare[] = DARES,
+): Dare => {
+  const { dareHistory, round, currentPlayerIndex, players } = gameState;
+  const currentPlayer = players[currentPlayerIndex];
+
+  const availableDares = dares.filter((dare) => {
+    const lastShownToPlayer = dareHistory.find(
+      (entry) => entry.dare.text === dare.text && entry.player.id === currentPlayer.id,
+    );
+    if (lastShownToPlayer && round - lastShownToPlayer.round < 5) {
+      return false;
+    }
+
+    const shownInCurrentRound = dareHistory.find(
+      (entry) => entry.dare.text === dare.text && entry.round === round,
+    );
+    if (shownInCurrentRound) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const toReturn =
+    availableDares[Math.floor(Math.random() * availableDares.length)];
+
   if (!toReturn) return basicDare;
   return toReturn;
 };
@@ -37,7 +64,7 @@ const startFirstRound = (
   setGameState: Dispatch<SetStateAction<GameState>>,
   setTimerActive: Dispatch<SetStateAction<boolean>>,
 ) => {
-  const firstDare = getRandomDare();
+  const firstDare = getRandomDare(gameState);
   const firstPlayer = gameState.players?.[0] ?? basicPlayer;
   const partners =
     firstDare.partnersCount > 0
@@ -48,6 +75,12 @@ const startFirstRound = (
         )
       : [];
 
+  const newDareHistoryEntry: DareHistoryEntry = {
+    dare: firstDare,
+    player: firstPlayer,
+    round: 0,
+  };
+
   setGameState((prev) => ({
     ...prev,
     currentPlayerIndex: 0,
@@ -56,6 +89,8 @@ const startFirstRound = (
     timeRemaining: firstDare.timeLimit,
     dareSkipsLeft: INITIAL_SKIPS,
     partnerSkipsLeft: INITIAL_SKIPS,
+    round: 0,
+    dareHistory: [newDareHistoryEntry],
   }));
 
   if (firstDare.timeLimit) {
@@ -65,21 +100,36 @@ const startFirstRound = (
 
 const startNewRound = (
   gameState: GameState,
-  currentPlayer: Player,
   setGameState: Dispatch<SetStateAction<GameState>>,
   setTimerActive: Dispatch<SetStateAction<boolean>>,
 ) => {
-  const newDare = getRandomDare();
   const newPlayerIndex =
     (gameState.currentPlayerIndex + 1) % gameState.players.length;
+  const newRound =
+    newPlayerIndex === 0 ? gameState.round + 1 : gameState.round;
+
+  const tempGameState = {
+    ...gameState,
+    currentPlayerIndex: newPlayerIndex,
+    round: newRound,
+  };
+
+  const newDare = getRandomDare(tempGameState);
+  const newPlayer = gameState.players[newPlayerIndex] ?? basicPlayer;
   const partners =
     newDare.partnersCount > 0
       ? getRandomPartners(
           newDare.partnersCount || 1,
           gameState.players,
-          gameState.players[newPlayerIndex] ?? basicPlayer,
+          newPlayer,
         )
       : [];
+
+  const newDareHistoryEntry: DareHistoryEntry = {
+    dare: newDare,
+    player: newPlayer,
+    round: newRound,
+  };
 
   setGameState((prev) => ({
     ...prev,
@@ -89,6 +139,8 @@ const startNewRound = (
     timeRemaining: newDare.timeLimit,
     dareSkipsLeft: INITIAL_SKIPS,
     partnerSkipsLeft: INITIAL_SKIPS,
+    round: newRound,
+    dareHistory: [...prev.dareHistory, newDareHistoryEntry],
   }));
 
   if (newDare.timeLimit) {
@@ -108,7 +160,8 @@ const handleSkipDare = (
     !gameState.currentDare.isUnskippable
   ) {
     const newDare = getRandomDare(
-      DARES.filter((el) => el !== gameState.currentDare),
+      gameState,
+      DARES.filter((el) => el.text !== gameState.currentDare.text),
     );
     let newPartners = [] as Player[];
 

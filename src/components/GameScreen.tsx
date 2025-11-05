@@ -8,12 +8,12 @@ import Drink from "./drink";
 import NextPlayer from "./next-player";
 import { Progress } from "@/components/ui/progress";
 import {
-  getRandomDare,
   startNewRound,
   startFirstRound,
   handleSkipDare,
   handleSkipPartner,
   basicPlayer,
+  basicDare,
 } from "@/lib/helpers";
 
 interface GameScreenProps {
@@ -26,27 +26,20 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
     currentPlayerIndex: 0,
     dareSkipsLeft: INITIAL_SKIPS,
     partnerSkipsLeft: INITIAL_SKIPS,
-    currentDare: getRandomDare(),
+    currentDare: basicDare,
     currentPartners: [],
+    round: 0,
+    dareHistory: [],
   });
   const [showDrink, setShowDrink] = useState(false);
   const [showNextPlayer, setShowNextPlayer] = useState(false);
   const [timerActive, setTimerActive] = useState(false);
-  const [currentPlayer, setCurrentPlayer] = useState(
-    gameState.players[0] ?? basicPlayer,
-  );
 
   useEffect(() => {
     startFirstRound(gameState, setGameState, setTimerActive);
   }, []);
 
-  useEffect(() => {
-    setCurrentPlayer(
-      gameState.players[
-        gameState.currentPlayerIndex % gameState.players.length
-      ] ?? basicPlayer,
-    );
-  }, [gameState.players, gameState.currentPlayerIndex]);
+  const currentPlayer = gameState.players[gameState.currentPlayerIndex] ?? basicPlayer;
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -70,7 +63,7 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
   };
 
   const handleNextPlayer = () => {
-    startNewRound(gameState, currentPlayer, setGameState, setTimerActive);
+    startNewRound(gameState, setGameState, setTimerActive);
     setShowNextPlayer(false);
   };
 
