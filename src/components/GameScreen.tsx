@@ -81,6 +81,24 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
     setShowNextPlayer(false);
   };
 
+  const renderDareText = (dareText: string, partners: Player[]) => {
+    if (!dareText) return "";
+
+    const partnerName = partners.length > 0 ? partners[0]?.name : "";
+    const parts = dareText.split(/(партньора ти|партньора си)/gi);
+
+    return parts.map((part, index) => {
+      if (
+        part.toLowerCase() === "партньора ти" ||
+        part.toLowerCase() === "партньора си"
+      ) {
+        return <strong key={index}>{partnerName}</strong>;
+      } else {
+        return part;
+      }
+    });
+  };
+
   if (showDrink) {
     return (
       <Drink
@@ -130,7 +148,12 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
             )}
           </div>
         </div>
-        <p className="text-lg">{gameState.currentDare?.text}</p>
+        <p className="text-lg">
+          {renderDareText(
+            gameState.currentDare?.text ?? "",
+            gameState.currentPartners,
+          )}
+        </p>
         {gameState.currentDare?.bonusText && (
           <p>{gameState.currentDare.bonusText}</p>
         )}
