@@ -39,7 +39,21 @@ export default function GameScreen({ initialPlayers }: GameScreenProps) {
     startFirstRound(gameState, setGameState, setTimerActive);
   }, []);
 
-  const currentPlayer = gameState.players[gameState.currentPlayerIndex] ?? basicPlayer;
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  const currentPlayer =
+    gameState.players[gameState.currentPlayerIndex] ?? basicPlayer;
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
